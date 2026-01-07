@@ -1,10 +1,12 @@
-import { Button } from "@/components/ui/button";
-import Image from "next/image";
 
-export default function Home() {
+import { trpc } from "@/trpc/server";
+
+
+export default async function Home() {
+  const data = await trpc.hello({text:"Aai"});
   return (
     <div>
-      I will upload videos soon
+      Client component says : {data?.greeting}
     </div>
   );
 }
