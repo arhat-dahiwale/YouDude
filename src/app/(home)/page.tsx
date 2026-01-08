@@ -1,12 +1,18 @@
 
-import { trpc } from "@/trpc/server";
-
+import { HydrateClient, trpc } from "@/trpc/server";
+import { PageClient } from "./client";
+import { Suspense } from "react";
+import {ErrorBoundary} from "react-error-boundary"
 
 export default async function Home() {
-  const data = await trpc.hello({text:"Aai"});
+  void trpc.hello.prefetch({text:"Aai"});
   return (
-    <div>
-      Client component says : {data?.greeting}
-    </div>
+    <HydrateClient>
+      <Suspense fallback={<p>Loading...</p>}>
+        <ErrorBoundary fallback={<p>Error...</p>}>
+          <PageClient />
+        </ErrorBoundary>
+      </Suspense>
+    </HydrateClient>
   );
 }
